@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const program = require('commander');
 const express = require('express'); 
 const runCommand = require('./runCommand');
