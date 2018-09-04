@@ -1,14 +1,10 @@
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 
 module.exports = (command) => {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(stderr);
-        reject(error);
-      }
-      console.log(stdout);
-      resolve({ code: 0 });
+  return new Promise((resolve) => {
+    const child = spawn(command, { shell: true, stdio: 'inherit' });
+    child.on('close', (code) => {
+      resolve({ code });
     });
   });
 };
