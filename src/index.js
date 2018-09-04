@@ -23,8 +23,8 @@ program
       console.log(`Hosting app for test on port ${port}!`);
       console.log('Testing started');
       const { code } = await runCommand(command);
-      process.exit(code);
       console.log('Testing complete');
+      process.exit(code);
     });
   });
 
