@@ -1,19 +1,30 @@
 const interceptor = require('express-interceptor');
 const cheerio = require('cheerio'); 
 
-const injectionMiddleware = interceptor(function(req, res){
+const createScript = (script) => {
+  return `<script>${script}</script>`;
+};
+
+const isHtml = (req) => req.url.endsWith('/') || req.url.endsWith('.html');
+
+const createInjectionMiddleware = (script) => interceptor(function(req, res){
   return {
-    // Only HTML responses will be intercepted
     isInterceptable: function(){
-      return /text\/html/.test(res.get('Content-Type'));
+      return isHtml(req);
     },
-    // Appends a paragraph at the end of the response body
     intercept: function(body, send) {
-      var $document = cheerio.load(body);
-      $document('body').append('<p>From interceptor!</p>');
+      console.log('Injecting script', script, 'into', req.url);
+      const $document = cheerio.load(body);
+      const firstScripts = $document('head script');
+      if (firstScripts && firstScripts.length > 0) {
+        firstScripts.first().before(createScript(script));
+      } else {
+        $document('head').append(createScript(script));
+      }
+      
       send($document.html());
     }
   };
 });
 
-module.exports = injectionMiddleware;
+module.exports = createInjectionMiddleware;
