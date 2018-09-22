@@ -5,6 +5,7 @@ const proxy = require('express-http-proxy');
 const runCommand = require('./runCommand');
 const getPort = require('./getPort');
 const createInjectionMiddleware = require('./injectionMiddleware');
+const createServeCustomScript = require('./serveCustomScript');
 const package = require('../package');
 
 program
@@ -31,6 +32,7 @@ program
     
     if (options.inject) {
       app.use(createInjectionMiddleware(options.inject));
+      app.get('/custom*', createServeCustomScript(options.inject));
     }
     
     if (options.host) {
