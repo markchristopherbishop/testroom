@@ -1,6 +1,6 @@
 # Testroom
 
-CLI utility that prepares web applications for functional testing.
+A CLI utility for hosting applications in a controllable sandbox for functional testing.
 
 ## Main features
 
