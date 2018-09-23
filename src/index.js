@@ -31,8 +31,11 @@ program
     }
     
     if (options.inject) {
-      app.use(createInjectionMiddleware(options.inject));
-      app.get('/custom*', createServeCustomScript(options.inject));
+      const filenames = options.inject.split(',');
+      if (filenames && filenames.length > 0) {
+        filenames.forEach((filename) => app.use(createInjectionMiddleware(filename)));
+      }
+      app.get('/custom*', createServeCustomScript(filenames));
     }
     
     if (options.host) {

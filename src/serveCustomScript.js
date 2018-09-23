@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const createCustomScript = (script) => (req, res) => {
-  const filename = path.basename(script);
-  if (req.url.endsWith(filename)) {
-    const fileContent = fs.readFileSync(script, { encoding: 'utf8' });
+const createCustomScript = (filenames) => (req, res) => {
+  const incomingName = path.basename(req.url);
+  const foundFilename = filenames.find(filename => path.basename(filename) === incomingName);
+  if (foundFilename) {
+    const fileContent = fs.readFileSync(foundFilename, { encoding: 'utf8' });
     res.setHeader('content-type', 'text/javascript');
     res.write(fileContent);
     res.end();

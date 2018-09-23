@@ -15,7 +15,7 @@ const createInjectionMiddleware = (script) => interceptor(function(req, res){
       return isHtml(req);
     },
     intercept: function(body, send) {
-      console.log('Injecting script', script, 'into', req.url);
+      console.log('Injecting script', script);
       const $document = cheerio.load(body);
       const firstScripts = $document('head script');
       if (firstScripts && firstScripts.length > 0) {
@@ -23,7 +23,6 @@ const createInjectionMiddleware = (script) => interceptor(function(req, res){
       } else {
         $document('head').append(createScript(script));
       }
-      
       send($document.html());
     }
   };
