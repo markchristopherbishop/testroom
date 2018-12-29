@@ -11,8 +11,5 @@
   },
   "bin": {
     "testroom": "./src/index.js"
-  },
-  "devDependencies": {
-    "lerna": "^3.4.3"
   }
 }
