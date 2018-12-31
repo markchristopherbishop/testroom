@@ -58,7 +58,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
           name: Publish package
-          command: npx lerna publish patch --yes --registry registry.npmjs.org
+          command: npx lerna publish patch --yes --registry https://registry.npmjs.org/
 workflows:
   version: 2
   build-deploy:
