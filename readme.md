@@ -8,7 +8,6 @@ A CLI utility for hosting applications in a controllable sandbox for functional 
 - Temporary host or proxy of site while tests run
 - Automatic shut down of host or proxy when tests are complete
 - Automatic port allocation
-- Injection of test scripts into application while testing
 
 ## Commands
 
