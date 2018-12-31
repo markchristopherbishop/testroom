@@ -1,4 +1,4 @@
-# Testroom
+# Testroom CLI
 
 A CLI utility for hosting applications in a controllable sandbox for functional testing.
 
