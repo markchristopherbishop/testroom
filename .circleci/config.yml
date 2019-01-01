@@ -3,12 +3,15 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10.15
+    
 jobs:
   build:
-    docker:
-      - image: circleci/node:7.10
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
       - checkout
 
@@ -18,9 +21,52 @@ jobs:
           - v1-dependencies-
 
       - run: npm install
+      
+      - run: npx lerna bootstrap
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
           
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+  deploy:
+    <<: *defaults
+    steps:
+      - add_ssh_keys
+      - run:
+          name: Create know_hosts
+          command: mkdir ~/.ssh
+      - run:
+          name: Add git email
+          command: git config --global user.email "ci@ci.com"
+      - run:
+          name: Add git name
+          command: git config --global user.name "Circle CI"
+      - run:
+          name: Keyscan Github (HACK)
+          command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Diagnostics
+          command: pwd
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+      - run:
+          name: Authenticate testroom-cli package
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/packages/testroom-cli/.npmrc
+      - run:
+          name: Publish package
+          command: npx lerna publish patch --yes
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
