@@ -57,6 +57,9 @@ jobs:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
       - run:
+          name: Authenticate with lerna registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/packages/testroom-cli/.npmrc
+      - run:
           name: Publish package
           command: npx lerna publish patch --yes
 workflows:
