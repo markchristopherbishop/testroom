@@ -16,7 +16,7 @@ program
   .description('run a test command against a target host or proxy')
   .option('-h, --host [host]', 'The directory to host for application testing')
   .option('-x, --proxy [proxy]', 'A website to proxy for application testing')
-  .option('-i, --inject [inject]', 'Script to inject')
+  .option('-i, --inject [inject]', 'Scripts to inject')
   .option('-p, --port [port]', 'The port to use for testing')
   .action(async (command, options) => {
     const host = 'localhost';

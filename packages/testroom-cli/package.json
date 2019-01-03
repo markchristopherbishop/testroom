@@ -1,6 +1,14 @@
 {
   "name": "testroom-cli",
   "version": "0.0.15",
+  "license": "MIT",
+  "keywords": [
+    "functional",
+    "host",
+    "mock",
+    "test",
+    "cli"
+  ],
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "commander": "^2.17.1",

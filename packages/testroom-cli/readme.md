@@ -1,6 +1,6 @@
 # Testroom CLI
 
-A CLI utility for hosting applications in a controllable sandbox for functional testing.
+A CLI utility to host web applications for functional testing.
 
 ## Main features
 
@@ -8,6 +8,7 @@ A CLI utility for hosting applications in a controllable sandbox for functional 
 - Temporary host or proxy of site while tests run
 - Automatic shut down of host or proxy when tests are complete
 - Automatic port allocation
+- Inject test scripts and mock data
 
 ## Commands
 
@@ -32,6 +33,8 @@ The test command is a standard shell command that will execute your test(s). Thi
 
 - **--port**, **-p**: The port to host or proxy the test website. If omitted (recommended) a random port will be used. The port number will also be automatically assigned to environment variable `TEST_PORT`. This means `TEST_PORT` is available for use in the `[test command]`.
 
+- **--inject**, **-i**: A comma delimited list of JavaScript filenames to be injected into the target website. All scripts will inserted into the HTML of the target website via `<script>` tags. Each will be served as if they originated from the same domain. Files will be injected into the `<head>` tag before any other scripts on the page.
+
 ## Examples
 
 ### Host local directory and execute tests against it
@@ -49,3 +52,9 @@ The above example will temporarily proxy `www.mywebsite.com` on a random port an
 ### Getting the port number in your tests
 
 `testroom` writes the port number it is using to the `TEST_PORT` environment variable. This means the port is always available to the executing `[test command]`. This can be useful to find out where the test site is hosted during the test. For example the, `[test command]` can be obtained like so: `http://localhost:${process.env.TEST_PORT}`.
+
+### Inject JavaScript to bootstrap test mocks etc
+
+`testroom run "wdio ./conf.js" -h ./dist -i ./myBootstrapTestMocks.js`
+
+The above example will insert `./myBootstrapTestMocks.js` in a new HTML script tag, within the `index.html`, `<head>` tag. The script will be inserted before any other scripts in the page.
