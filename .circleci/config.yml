@@ -18,12 +18,13 @@ jobs:
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
 
       - run: npm install
       
       - run: npx lerna bootstrap
 
+      - run: npx lerna run test
+      
       - save_cache:
           paths:
             - node_modules
