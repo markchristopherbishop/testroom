@@ -1,11 +1,14 @@
 const Command = require('commander').Command;
 const express = require('express'); 
 const proxy = require('express-http-proxy');
+const path = require('path');
 const runCommand = require('./runCommand');
 const getPort = require('./getPort');
 const createInjectionMiddleware = require('./injectionMiddleware');
+const createDelayMiddleware = require('./delayMiddleware');
 const createServeCustomScript = require('./serveCustomScript');
 const package = require('../package');
+const { testroomScriptPath } = require('./constants');
 
 const command = new Command();
 
@@ -19,7 +22,10 @@ command
   .option('-x, --proxy [proxy]', 'A website to proxy for application testing')
   .option('-i, --inject [inject]', 'Scripts to inject')
   .option('-p, --port [port]', 'The port to use for testing')
+  .option('-d, --delayScripts [scriptPattern]', 'Delay loading scripts')
   .action(async (command, options) => {
+    const testroomBootstrapScript = path.join(__dirname, 'browserScripts/index.js');
+    const filenamesToInject = [testroomBootstrapScript];
     const host = 'localhost';
     const port = parseFloat(options.port) || await getPort();
     process.env.TEST_PORT = port;
@@ -34,11 +40,14 @@ command
     }
     
     if (options.inject) {
-      const filenames = options.inject.split(',');
-      if (filenames && filenames.length > 0) {
-        filenames.forEach((filename) => app.use(createInjectionMiddleware(filename)));
+      filenamesToInject.push(...options.inject.split(','));
+      if (filenamesToInject && filenamesToInject.length > 0) {
+        filenamesToInject.forEach((filename) => app.use(createInjectionMiddleware(filename)));
       }
-      app.get('/custom*', createServeCustomScript(filenames));
+    }
+    
+    if (options.delayScripts) {
+      app.use(createDelayMiddleware());
     }
     
     if (options.host) {
@@ -48,6 +57,9 @@ command
       console.log(`Proxing ${options.proxy} for test on http://${host}:${port}`);
       app.use('/', proxy(options.proxy))
     }
+    
+    app.use(createInjectionMiddleware(testroomBootstrapScript));
+    app.get(`/${testroomScriptPath}*`, createServeCustomScript(filenamesToInject));
     
     app.listen(port, async () => {
       console.log('Testing started');

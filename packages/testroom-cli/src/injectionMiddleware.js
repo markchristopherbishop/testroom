@@ -2,10 +2,11 @@ const interceptor = require('express-interceptor');
 const cheerio = require('cheerio'); 
 const path = require('path');
 const fs = require('fs');
+const { testroomScriptPath } = require('./constants');
 
 const createScript = (script) => {
   const name = path.basename(script);
-  return `<script type="text/javascript" src="custom/${name}"></script>`;
+  return `<script type="text/javascript" src="${testroomScriptPath}/${name}"></script>`;
 };
 
 const isHtml = (req) => req.url.endsWith('/') || req.url.endsWith('.html');

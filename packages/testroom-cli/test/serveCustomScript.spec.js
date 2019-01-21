@@ -1,6 +1,7 @@
 const chai = require('chai');
 const proxyquire = require('proxyquire').noCallThru();
 const spies = require('chai-spies')
+const { testroomScriptPath } = require('../src/constants');
 
 chai.use(spies);
 const expect = chai.expect;
@@ -13,7 +14,7 @@ describe('serveCustomScript', () => {
   const customContent = 'console.log("time")';
   
   beforeEach(() => {
-    req = { url: 'http://localhost:8080/custom/test.js' };
+    req = { url: `http://localhost:8080/${testroomScriptPath}/test.js` };
     res = { setHeader: chai.spy(), write: chai.spy(), end: chai.spy() };
     fs = { readFileSync: chai.spy.returns(customContent) };
     serveCustomScript = proxyquire('../src/serveCustomScript', { fs });

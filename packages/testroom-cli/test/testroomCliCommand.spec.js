@@ -25,6 +25,7 @@ describe('testroom-cli', () => {
         'express-http-proxy': chai.spy(),
         './serveCustomScript': chai.spy(),
         './injectionMiddleware': chai.spy(),
+        'path': { join: (a, b) => b }
       };
       command = proxyquire('../src/testroomCliCommand', dependencies);
       process.exit = chai.spy();
@@ -49,9 +50,15 @@ describe('testroom-cli', () => {
       expect(process.exit).to.have.been.called.with(1);
     });
     
+    it('should inject testroom browser api', () => {
+      command.parse(['', '', 'run', 'echo test', '-h', './dist', '-p', '3000']);
+      expect(dependencies['./injectionMiddleware']).to.have.been.called.with('browserScripts/index.js');
+      expect(dependencies['./serveCustomScript']).to.have.been.called.with(['browserScripts/index.js']);
+    });
+    
     it('should add middleware to serve custom scripts', () => {
       command.parse(['', '', 'run', 'echo test', '-h', './dist', '-p', '3000', '-i', './test.js']);
-      expect(dependencies['./serveCustomScript']).to.have.been.called.with(['./test.js']);
+      expect(dependencies['./serveCustomScript']).to.have.been.called.with(['browserScripts/index.js', './test.js']);
     });
     
     it('should add middleware to inject custom script tags in responses for each script', () => {

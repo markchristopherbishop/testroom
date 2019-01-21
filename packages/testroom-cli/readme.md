@@ -9,6 +9,7 @@ A CLI utility to host web applications for functional testing.
 - Automatic shut down of host or proxy when tests are complete
 - Automatic port allocation
 - Inject test scripts and mock data
+- Delay script loading
 
 ## Commands
 
@@ -35,6 +36,16 @@ The test command is a standard shell command that will execute your test(s). Thi
 
 - **--inject**, **-i**: A comma delimited list of JavaScript filenames to be injected into the target website. All scripts will inserted into the HTML of the target website via `<script>` tags. Each will be served as if they originated from the same domain. Files will be injected into the `<head>` tag before any other scripts on the page.
 
+- **--delay**. **-d**: Delay loading page scripts indefinitely. By default this command will delay the loading of all non testroom (custom / `-i`) scripts. It means `<script>` tags will not load when the page loads. Instead the page will wait for an invocation of [testroom.loadDelayedScripts](#testroom.loadDelayedScripts) from within the page. This will then load all scripts as normal.
+
+## Browser API
+
+The testroom API will be exposed to any web page hosted by testroom.
+
+### <a name="testroom.loadDelayedScripts"></a>testroom.loadDelayedScripts
+
+This command will load any scripts that have been delayed by using the `-d` option when starting testroom.
+
 ## Examples
 
 ### Host local directory and execute tests against it
@@ -58,3 +69,9 @@ The above example will temporarily proxy `www.mywebsite.com` on a random port an
 `testroom run "wdio ./conf.js" -h ./dist -i ./myBootstrapTestMocks.js`
 
 The above example will insert `./myBootstrapTestMocks.js` in a new HTML script tag, within the `index.html`, `<head>` tag. The script will be inserted before any other scripts in the page.
+
+### Delay the loading of scripts in my page so the test framework can prepare mocks etc
+
+`testroom run "wdio config.js" -h ./dist -d`
+
+This will host the `dist` directory on a random port and run `wdio config.js` to start tests. As the `-d` flag is specified, when a web page is loaded, its scripts will be halted until the test framework, in this case `wdio`, invokes [testroom.loadDelayedScripts](#testroom.loadDelayedScripts). This means the test can load the page, do any preparation it requires then invoke [testroom.loadDelayedScripts](#testroom.loadDelayedScripts) to continue executing the tests.

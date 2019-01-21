@@ -1,6 +1,7 @@
 const chai = require('chai');
 const spies = require('chai-spies');
 const proxyquire = require('proxyquire').noCallThru();
+const { testroomScriptPath } = require('../src/constants');
 
 chai.use(spies);
 const expect = chai.expect;
@@ -24,14 +25,14 @@ describe('injectionMiddleware', () => {
   it('should modify returned html to include the given script', () => {
     injectionMiddleware(testFile)(req, res, next);
     res.end(`<html></html>`, 'utf-8');
-    const injectedScript = `<script type="text/javascript" src="custom/test.js"></script>`;
+    const injectedScript = `<script type="text/javascript" src="${testroomScriptPath}/test.js"></script>`;
     expect(endMock).to.have.been.called.with(
       `<html><head>${injectedScript}</head><body></body></html>`);
   });
   
   it('should insert given script before any other scripts in the page', () => {
     injectionMiddleware(testFile)(req, res, next);
-    const injectedScript = `<script type="text/javascript" src="custom/test.js"></script>`;
+    const injectedScript = `<script type="text/javascript" src="${testroomScriptPath}/test.js"></script>`;
     res.end(`<html><head>${script}</head><body></body></html>`, 'utf-8');
     expect(endMock).to.have.been.called.with(
       `<html><head>${injectedScript}${script}</head><body></body></html>`);
