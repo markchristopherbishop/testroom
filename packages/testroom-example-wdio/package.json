@@ -6,8 +6,8 @@
     "@types/cucumber": "^4.0.4",
     "@types/webdriverio": "^4.10.3",
     "chai": "^4.1.2",
-    "testroom-cli": "^0.0.18",
-    "testroom-example-app": "^0.0.18",
+    "testroom-cli": "^0.0.19",
+    "testroom-example-app": "^0.0.19",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
     "wdio-cucumber-framework": "^2.2.6",
@@ -17,5 +17,6 @@
   },
   "scripts": {
     "test": "testroom run \"wdio ./test/functional/conf.js\" -h ../testroom-example-app/build -d"
-  }
+  },
+  "version": "0.0.19"
 }

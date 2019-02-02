@@ -1,6 +1,6 @@
 {
   "name": "testroom-example-app",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "private": true,
   "dependencies": {
     "@types/jest": "23.3.13",
