@@ -1,0 +1,9 @@
+* {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  padding: 0px;
+  margin: 0px;
+}
+
+body, html, #root {
+  height: 100%;
+}

@@ -41,9 +41,10 @@ command
     
     if (options.inject) {
       filenamesToInject.push(...options.inject.split(','));
-      if (filenamesToInject && filenamesToInject.length > 0) {
-        filenamesToInject.forEach((filename) => app.use(createInjectionMiddleware(filename)));
-      }
+    }
+    
+    if (filenamesToInject && filenamesToInject.length > 0) {
+      filenamesToInject.forEach((filename) => app.use(createInjectionMiddleware(filename)));
     }
     
     if (options.delayScripts) {
@@ -58,7 +59,6 @@ command
       app.use('/', proxy(options.proxy))
     }
     
-    app.use(createInjectionMiddleware(testroomBootstrapScript));
     app.get(`/${testroomScriptPath}*`, createServeCustomScript(filenamesToInject));
     
     app.listen(port, async () => {
