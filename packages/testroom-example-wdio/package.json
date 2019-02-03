@@ -1,14 +1,14 @@
 {
   "name": "testroom-example-wdio",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "private": true,
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/cucumber": "^4.0.4",
     "@types/webdriverio": "^4.10.3",
     "chai": "^4.1.2",
-    "testroom-cli": "^0.0.19",
-    "testroom-example-app": "^0.0.19",
+    "testroom-cli": "^0.0.20",
+    "testroom-example-app": "^0.0.20",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
     "wdio-cucumber-framework": "^2.2.6",
