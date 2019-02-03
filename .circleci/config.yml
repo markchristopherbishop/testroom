@@ -7,7 +7,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/repo
   docker:
-    - image: circleci/node:10.15-jessie-browsers
+    - image: circleci/node:10.15-browsers
     
 jobs:
   build:
@@ -71,5 +71,8 @@ workflows:
     jobs:
       - build
       - deploy:
+          filters:
+            branches:
+              only: master
           requires:
             - build

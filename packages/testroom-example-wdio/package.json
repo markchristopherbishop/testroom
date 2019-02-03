@@ -1,5 +1,6 @@
 {
-  "name": "0.0.18",
+  "name": "testroom-example-wdio",
+  "version": "0.0.19",
   "private": true,
   "devDependencies": {
     "@types/chai": "^4.1.4",
@@ -17,6 +18,5 @@
   },
   "scripts": {
     "test": "testroom run \"wdio ./test/functional/conf.js\" -h ../testroom-example-app/build -d"
-  },
-  "version": "0.0.19"
+  }
 }
