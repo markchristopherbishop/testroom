@@ -17,7 +17,16 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - v1-testroom-cli-dependencies-{{ checksum "packages/testroom-cli/package.json" }}
+      - restore_cache:
+          keys:
+            - v1-testroom-example-app-dependencies-{{ checksum "packages/testroom-example-app/package.json" }}
+      - restore_cache:
+          keys:
+            - v1-testroom-example-wdio-dependencies-{{ checksum "packages/testroom-example-wdio/package.json" }}
 
       - run: npm install
       
@@ -31,7 +40,19 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-          
+      - save_cache:
+          key: v1-testroom-cli-dependencies-{{ checksum "packages/testroom-cli/package.json" }}
+          paths:
+            - packages/testroom-cli/node_modules
+      - save_cache:
+          key: v1-testroom-example-app-dependencies-{{ checksum "packages/testroom-example-app/package.json" }}
+          paths:
+            - packages/testroom-example-app/node_modules
+      - save_cache:
+          key: v1-testroom-example-wdio-dependencies-{{ checksum "packages/testroom-example-wdio/package.json" }}
+          paths:
+            - packages/testroom-example-wdio/node_modules
+            
       - persist_to_workspace:
           root: ~/repo
           paths: .
